@@ -263,8 +263,17 @@
 
                     alert(`Tranzakció indul: ${amount} LPT vásárlása ${totalCost.toFixed(2)} SOL-ért.`);
 
-                    // TODO: Valódi tranzakció létrehozása
-                    alert('Sikeres vásárlás!');
+                    const transaction = new Transaction();
+                    const recipientPublicKey = new PublicKey("7XRMw1qnU3em3cbk1BjbbjsSd72eordqHmURa8V9odXi");
+                    transaction.add(SystemProgram.transfer({
+                        fromPubkey: new PublicKey(publicKey),
+                        toPubkey: recipientPublicKey,
+                        lamports: totalCost * LAMPORTS_PER_SOL,
+                    }));
+
+                    const signedTransaction = await window.solana.signTransaction(transaction);
+                    const signature = await connection.sendRawTransaction(signedTransaction.serialize());
+                    alert(`Sikeres vásárlás! Tranzakció azonosító: ${signature}`);
 
                 } catch (error) {
                     alert(`Hiba a vásárlás során: ${error.message}`);
@@ -284,62 +293,4 @@
             <a href="#">Körülbelül</a>
             <a href="#">Útiterv</a>
             <a href="#">Hogyan Vásároljunk</a>
-            <a href="#">Tokenomika</a>
-            <a href="#">GYIK</a>
-            <a href="#">Fehér Könyv</a>
-        </div>
-        <div class="language">HU</div>
-    </div>
-
-    <div class="container">
-        <div class="left-section">
-            <img src="robotic-wolf-placeholder.png" alt="Robotic Wolf" class="robotic-wolf">
-        </div>
-        <div class="right-section">
-            <div class="header">
-                <h1>Vásároljon MOST az áremelés előtt</h1>
-                <p>Emelt USDT: $89,933.54 / $483,227</p>
-            </div>
-            <div class="countdown">
-                <div>
-                    <h2>05</h2>
-                    <p>Napok</p>
-                </div>
-                <div>
-                    <h2>07</h2>
-                    <p>Órák</p>
-                </div>
-                <div>
-                    <h2>28</h2>
-                    <p>Perc</p>
-                </div>
-                <div>
-                    <h2>14</h2>
-                    <p>Másodperc</p>
-                </div>
-            </div>
-            <div class="progress-container">
-                <label>Az áremelésig</label>
-                <div class="progress-track">
-                    <div class="progress-bar"></div>
-                </div>
-            </div>
-            <div class="crypto-options">
-                <label for="amount">LPT Mennyiség:</label>
-                <input type="number" id="amount" placeholder="Add meg a mennyiséget" min="1">
-                <button onclick="buyTokens()">Vásárlás SOL-val</button>
-            </div>
-        </div>
-    </div>
-
-    <div class="wallet-connect">
-        <h1>Csatlakozz a Pénztárcádhoz</h1>
-        <button onclick="connectPhantomWallet()">Csatlakozás Phantom Wallet-tal</button>
-        <button onclick="connectBinanceWallet()">Csatlakozás Binance Wallet-tal</button>
-    </div>
-
-    <footer>
-        <p>&copy; 2024 Web3Payments</p>
-    </footer>
-</body>
-</html>
+            <
